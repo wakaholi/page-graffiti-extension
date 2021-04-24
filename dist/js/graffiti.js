@@ -1,1 +1,1 @@
-(()=>{"use strict";chrome.runtime.onInstalled.addListener((()=>{console.log("page-graffiti-extensionをインストールした")}))})();
+(()=>{"use strict";console.log("page-graffiti-extension起動〜")})();

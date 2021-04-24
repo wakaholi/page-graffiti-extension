@@ -1,3 +1,3 @@
-chrome.runtime.onInstalled.addListener(() => {
-  console.log('page-graffiti-extensionをインストールした')
-})
+(function initialize() {
+  console.log("page-graffiti-extension起動〜");
+})();
