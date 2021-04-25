@@ -1,3 +1,9 @@
+const dragStart = () => {}
+
+const dragEnd = () => {}
+
+const draw = (x: number, y: number) => {}
+
 const initEventHandler = async (event: KeyboardEvent): Promise<void> => {
   if (event.key !== "d" || !event.ctrlKey) {
     return;
@@ -11,13 +17,20 @@ const initEventHandler = async (event: KeyboardEvent): Promise<void> => {
     return;
   }
 
-  const drawElement = document.createElement("canvas");
-  drawElement.classList.add('pge-draw-area');
+  const canvas = document.createElement("canvas");
+  canvas.classList.add('pge-draw-area');
   const height = document.body.scrollHeight;
   const width = document.body.scrollWidth;
   const cssTest = `position: absolute; top: 0; left: 0; right: 0; bottom: 0; height: ${height}px; width: ${width}px;`;
-  drawElement.style.cssText = cssTest;
-  document.body.appendChild(drawElement);
+  canvas.style.cssText = cssTest;
+  document.body.appendChild(canvas);
+
+  canvas.addEventListener('mousedown', dragStart);
+  canvas.addEventListener('mouseup', dragEnd);
+  canvas.addEventListener('mouseout', dragEnd);
+  canvas.addEventListener('mousemove', (event) => {
+    draw(event.movementX, event.movementY);
+  });
 }
 
 (function initialize() {
