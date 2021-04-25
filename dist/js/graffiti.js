@@ -1,1 +1,1 @@
-(()=>{"use strict";console.log("page-graffiti-extension起動〜")})();
+(()=>{"use strict";!function(){console.log("page-graffiti-extension起動〜");const t=document.createElement("canvas");t.classList.add("pge-draw-area");const e=`position: absolute; top: 0; left: 0; right: 0; bottom: 0; height: ${document.body.scrollHeight}px; width: ${document.body.scrollWidth}px;`;t.style.cssText=e,document.body.appendChild(t)}()})();
