@@ -1,15 +1,7 @@
-const dragStart = () => {}
-
-const dragEnd = () => {}
-
-const draw = (x: number, y: number) => {}
-
 const initEventHandler = async (event: KeyboardEvent): Promise<void> => {
   if (event.key !== "d" || !event.ctrlKey) {
     return;
   }
-
-  console.log(document.getElementsByClassName("pge-draw-area").length);
 
   if(document.getElementsByClassName("pge-draw-area").length === 1) {
     const drawArea = document.getElementsByClassName("pge-draw-area")[0];
@@ -25,6 +17,47 @@ const initEventHandler = async (event: KeyboardEvent): Promise<void> => {
   canvas.style.cssText = cssTest;
   document.body.appendChild(canvas);
 
+  const context = canvas.getContext('2d');
+  const lastPosition = { x: 0, y: 0 };
+  let isDrag = false;
+
+  const dragStart = () => {
+    context?.beginPath();
+ 
+    isDrag = true;
+  }
+
+  const dragEnd = () => {
+    context?.closePath();
+    isDrag = false;
+  
+    lastPosition.x = 0;
+    lastPosition.y = 0;
+  }
+
+  const draw = (x: number, y: number) => {
+    if(!isDrag || !context) {
+      return;
+    }
+    context.lineCap = 'round';
+    context.lineJoin = 'round';
+    context.lineWidth = 1;
+    context.strokeStyle = 'black';
+    if (lastPosition.x === 0 || lastPosition.y === 0) {
+      context.moveTo(x, y);
+    } else {
+      context.moveTo(lastPosition.x, lastPosition.y);
+    }
+    context.lineTo(x, y);
+
+    context.stroke();
+
+    lastPosition.x = x;
+    lastPosition.y = y;
+  }
+
+
+
   canvas.addEventListener('mousedown', dragStart);
   canvas.addEventListener('mouseup', dragEnd);
   canvas.addEventListener('mouseout', dragEnd);
@@ -34,7 +67,7 @@ const initEventHandler = async (event: KeyboardEvent): Promise<void> => {
 }
 
 (function initialize() {
-  console.log("page-graffiti-extension起動〜");
+  console.log("page-graffiti-extension");
 
   document.addEventListener("keydown", initEventHandler);
 })();
