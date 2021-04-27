@@ -11,13 +11,15 @@ const initEventHandler = async (event: KeyboardEvent): Promise<void> => {
 
   const canvas = document.createElement("canvas");
   canvas.classList.add('pge-draw-area');
-  const height = document.body.scrollHeight;
-  const width = document.body.scrollWidth;
-  const cssTest = `position: absolute; top: 0; left: 0; right: 0; bottom: 0; height: ${height}px; width: ${width}px;`;
+  canvas.height = document.body.scrollHeight * 2;
+  canvas.width = document.body.scrollWidth * 2;
+  const cssTest = `position: absolute; top: 0; left: 0; right: 0; bottom: 0; height: ${document.body.scrollHeight}px; width: ${document.body.scrollWidth}px;`;
   canvas.style.cssText = cssTest;
   document.body.appendChild(canvas);
 
   const context = canvas.getContext('2d');
+  // 解像度が高いと滲んでしまうため2倍のscaleをセットする
+  context?.scale(2, 2);
   const lastPosition = { x: 0, y: 0 };
   let isDrag = false;
 
@@ -41,28 +43,27 @@ const initEventHandler = async (event: KeyboardEvent): Promise<void> => {
     }
     context.lineCap = 'round';
     context.lineJoin = 'round';
-    context.lineWidth = 1;
+    context.lineWidth = 2;
     context.strokeStyle = 'black';
-    if (lastPosition.x === 0 || lastPosition.y === 0) {
-      context.moveTo(x, y);
-    } else {
-      context.moveTo(lastPosition.x, lastPosition.y);
-    }
-    context.lineTo(x, y);
+
+    const canvasRect = canvas.getBoundingClientRect();
+
+    const canvasScale = {
+      x: canvas.width / canvasRect.width,
+      y: canvas.height / canvasRect.height,
+    };
+
+    lastPosition.x = (x - canvasRect.left) * canvasScale.x;
+    lastPosition.y = (y - canvasRect.top) * canvasScale.y;
+    context.lineTo(lastPosition.x / 2, lastPosition.y / 2);
 
     context.stroke();
-
-    lastPosition.x = x;
-    lastPosition.y = y;
   }
-
-
-
   canvas.addEventListener('mousedown', dragStart);
   canvas.addEventListener('mouseup', dragEnd);
   canvas.addEventListener('mouseout', dragEnd);
   canvas.addEventListener('mousemove', (event) => {
-    draw(event.movementX, event.movementY);
+    draw(event.pageX, event.pageY);
   });
 }
 
