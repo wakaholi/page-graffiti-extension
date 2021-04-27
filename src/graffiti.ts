@@ -48,13 +48,19 @@ const initEventHandler = async (event: KeyboardEvent): Promise<void> => {
 
     const canvasRect = canvas.getBoundingClientRect();
 
+    // スクロールを加味する
+    const rect = {
+      left: canvasRect.left + window.pageXOffset,
+      top: canvasRect.top + window.pageYOffset,
+    };
+
     const canvasScale = {
       x: canvas.width / canvasRect.width,
       y: canvas.height / canvasRect.height,
     };
 
-    lastPosition.x = (x - canvasRect.left) * canvasScale.x;
-    lastPosition.y = (y - canvasRect.top) * canvasScale.y;
+    lastPosition.x = (x - rect.left) * canvasScale.x;
+    lastPosition.y = (y - rect.top) * canvasScale.y;
     context.lineTo(lastPosition.x / 2, lastPosition.y / 2);
 
     context.stroke();
