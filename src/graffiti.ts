@@ -18,7 +18,7 @@ const initEventHandler = async (event: KeyboardEvent): Promise<void> => {
   document.body.appendChild(canvas);
 
   const context = canvas.getContext('2d');
-  // 解像度が高いと滲んでしまうため2倍のscaleをセットする
+  // 解像度が低いと滲んでしまうため2倍のscaleをセットする
   context?.scale(2, 2);
   const lastPosition = { x: 0, y: 0 };
   let isDrag = false;
