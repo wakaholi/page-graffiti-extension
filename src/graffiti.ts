@@ -1,4 +1,4 @@
-const initEventHandler = async (event: KeyboardEvent): Promise<void> => {
+const initEventHandler = (event: KeyboardEvent): void=> {
   if (event.key !== "d" || !event.ctrlKey) {
     return;
   }
